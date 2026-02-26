@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>Список покупок {{ username }}</h1>
+    
+    <!-- Форма добавления нового товара -->
+    <div class="add-item-form">
+        <h2>Добавить товар</h2>
+        <form action="{{ url_for('add_item') }}" method="POST">
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Название товара" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="number" name="quantity" placeholder="Количество" value="1" min="1">
+                </div>
+                
+                <div class="form-group">
+                    <select name="category">
+                        <option value="Продукты">Продукты</option>
+                        <option value="Напитки">Напитки</option>
+                        <option value="Бытовая химия">Бытовая химия</option>
+                        <option value="Другое">Другое</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Добавить</button>
+        </form>
+    </div>
+    
+    <!-- Список покупок по категориям -->
+    <div class="shopping-list">
+        {% if categories %}
+            {% for category, items in categories.items() %}
+            <div class="category">
+                <h3>{{ category }}</h3>
+                <ul>
+                    {% for item in items %}
+                    <li class="{% if item['purchased'] %}purchased{% endif %}">
+                        <span class="item-name">{{ item['name'] }}</span>
+                        <span class="item-quantity">x{{ item['quantity'] }}</span>
+                        
+                        <div class="item-actions">
+                            <a href="{{ url_for('toggle_item', item_id=item['id']) }}" 
+                               class="btn-toggle">
+                                {% if item['purchased'] %}↩️{% else %}✅{% endif %}
+                            </a>
+                            
+                            <a href="{{ url_for('delete_item', item_id=item['id']) }}" 
+                               class="btn-delete"
+                               onclick="return confirm('Удалить товар?')">
+                                🗑️
+                            </a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="empty-list">Ваш список покупок пуст. Добавьте первый товар!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

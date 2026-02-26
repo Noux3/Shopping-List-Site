@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero">
+    <h1>Добро пожаловать в приложение "Список покупок"</h1>
+    <p>Создавайте списки покупок, отмечайте купленное и никогда ничего не забывайте!</p>
+    
+    {% if not session.user_id %}
+    <div class="cta-buttons">
+        <a href="{{ url_for('register') }}" class="btn btn-primary">Зарегистрироваться</a>
+        <a href="{{ url_for('login') }}" class="btn btn-secondary">Войти</a>
+    </div>
+    {% else %}
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Перейти к моим покупкам</a>
+    {% endif %}
+</div>
+
+<div class="features">
+    <div class="feature">
+        <h3>📝 Простое добавление</h3>
+        <p>Добавляйте товары одним кликом</p>
+    </div>
+    <div class="feature">
+        <h3>✅ Отмечайте купленное</h3>
+        <p>Легко отслеживайте прогресс</p>
+    </div>
+    <div class="feature">
+        <h3>🗑️ Удаление</h3>
+        <p>Убирайте ненужные товары</p>
+    </div>
+</div>
+{% endblock %}
